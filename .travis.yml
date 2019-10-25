@@ -41,7 +41,7 @@ script:
   - if [[ -a .git/shallow ]]; then git fetch --unshallow; fi
   - if [[ `uname` = "Linux" ]]; then TESTCMD="xvfb-run julia"; else TESTCMD="julia"; fi
   - $TESTCMD -e 'using Pkg; pkg"add https://github.com/staticfloat/Cairo.jl#sf/jll_packages"'
-  - while sleep 540 ; do echo "===== saying hello to Travis ====="; done & $TESTCMD -e 'using Pkg; Pkg.build(); Pkg.test(coverage=true)'
+  - while sleep 540 ; do echo "===== saying hello to Travis ====="; done & WAIT_PID=$!; $TESTCMD -e 'using Pkg; Pkg.build(); Pkg.test(coverage=true)'; kill ${WAIT_PID}
 
 ## uncomment following lines to deploy documentation
 jobs:
